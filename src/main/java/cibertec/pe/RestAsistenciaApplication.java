@@ -1,0 +1,24 @@
+package cibertec.pe;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import cibertec.pe.security.GlobalApiKeyHandler;
+import cibertec.pe.service.AsistenciaServiceImpl;
+import jakarta.xml.ws.Endpoint;
+
+@SpringBootApplication
+@EnableFeignClients
+public class RestAsistenciaApplication {
+	public static void main(String[] args) {
+	    ConfigurableApplicationContext context = SpringApplication.run(RestAsistenciaApplication.class, args);
+	    
+	    AsistenciaServiceImpl service = context.getBean(AsistenciaServiceImpl.class);
+	    
+	    Endpoint endpoint = Endpoint.create(service);
+	    endpoint.publish("http://localhost:8090/ws/asistencia");
+	}
+}
